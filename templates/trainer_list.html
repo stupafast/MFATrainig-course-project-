@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora" style="padding-top: 2rem; padding-bottom: 3rem;">
+    <h1 class="page-title">{% if lang == 'ru' %}Тренажёр атак MFA{% else %}MFA Attack Trainer{% endif %}</h1>
+    <p class="page-sub">
+        {% if lang == 'ru' %}5 сценариев: QR-фишинг, брутфорс, timing-атака, session hijacking, rate limiting bypass. Выберите сценарий и начните.{% else %}5 scenarios: QR phishing, brute-force, timing attack, session hijacking, rate limiting bypass. Pick one and start.{% endif %}
+    </p>
+    <div class="trainer-cards">
+        {% for s in scenarios %}
+        <div class="trainer-card">
+            <div class="diff {{ s.difficulty|lower }}">{{ s.difficulty }}</div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 0.35rem;">{{ s.name }}</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                {{ s.desc_ru if lang == 'ru' else s.desc_en }}
+            </p>
+            <p style="display: flex; gap: 1rem; flex-wrap: wrap; font-family: var(--font-sans);">
+                <a class="cta" href="{{ url_for('lecture', scenario_id=s.id) }}">{% if lang == 'ru' %}Лекция{% else %}Lecture{% endif %}</a>
+                <a class="cta" href="{{ url_for('trainer_sim', sim_id=s.id) }}">{% if lang == 'ru' %}Симуляция{% else %}Simulation{% endif %}</a>
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

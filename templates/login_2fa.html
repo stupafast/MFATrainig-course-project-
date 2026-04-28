@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora" style="padding-top: 3rem; padding-bottom: 3rem;">
+    <div style="max-width: 400px; margin: 0 auto;">
+        <h1 class="page-title">{% if lang == 'ru' %}Двухфакторная аутентификация{% else %}Two-Factor Authentication{% endif %}</h1>
+        <p class="page-sub">{% if lang == 'ru' %}Введите 6-значный код из приложения (Google Authenticator, Authy).{% else %}Enter the 6-digit code from your app (Google Authenticator, Authy).{% endif %}</p>
+        <form method="POST" class="form-aurora">
+            <label>{% if lang == 'ru' %}Код{% else %}Code{% endif %}</label>
+            <input type="text" name="code" placeholder="123456" maxlength="6" required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*" style="text-align: center; font-size: 1.25rem; letter-spacing: 0.5em;">
+            <button type="submit" class="btn-submit">{% if lang == 'ru' %}Проверить{% else %}Verify{% endif %}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

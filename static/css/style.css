@@ -1,0 +1,531 @@
+/* MFAurora — x.ai inspired design */
+:root {
+  --bg: #0a0a0a;
+  --bg-elevated: #141414;
+  --bg-card: #1a1a1a;
+  --border: #2a2a2a;
+  --text: #f5f5f5;
+  --text-muted: #a3a3a3;
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Consolas", "Monaco", monospace;
+}
+
+[data-theme="light"] {
+  --bg: #fafafa;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --border: #e5e5e5;
+  --text: #171717;
+  --text-muted: #525252;
+  --accent: #1d4ed8;
+  --accent-hover: #1e40af;
+  --warning: #ca8a04;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body, input, button, select, textarea, .form-aurora input, .form-aurora .btn-submit,
+.nav-aurora a, .btn-aurora, .card-aurora, .table-aurora, .footer-aurora,
+.page-title, .page-sub, .dash-sidebar, .alert-aurora, .trainer-card,
+.lecture-page, .quiz-item, label, h1, h2, h3, h4, p, small {
+  font-family: var(--font-sans);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Stepik-style code blocks */
+pre, code, .code-block {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.code-block {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.code-block pre code {
+  padding: 0;
+  background: none;
+  color: var(--text);
+}
+
+/* highlight.js overrides for our theme */
+.hljs { background: var(--bg-elevated) !important; padding: 1rem 1.25rem !important; border-radius: 8px; border: 1px solid var(--border); }
+.hljs { font-family: var(--font-mono) !important; font-size: 0.9rem !important; }
+
+/* Nav — theme-aware, always readable */
+.nav-aurora {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-aurora .brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  color: var(--text) !important;
+  text-decoration: none;
+}
+
+.nav-aurora .nav-link-aurora {
+  color: var(--text-muted) !important;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-aurora .nav-link-aurora:hover {
+  color: var(--text) !important;
+  background: var(--bg);
+}
+
+.nav-aurora .nav-link-admin {
+  color: var(--warning) !important;
+}
+
+.nav-aurora .nav-link-admin:hover {
+  color: var(--warning) !important;
+  opacity: 0.9;
+}
+
+/* Primary buttons — nav, hero, forms, content */
+.btn-aurora {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text) !important;
+  cursor: pointer;
+}
+
+.btn-aurora.btn-primary-aurora {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff !important;
+}
+
+.btn-aurora.btn-primary-aurora:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #fff !important;
+}
+
+.nav-aurora .btn-aurora.active {
+  background: var(--bg);
+  border-color: var(--accent);
+  color: var(--accent) !important;
+}
+
+/* Hero — x.ai "Understand the Universe" */
+.hero-aurora {
+  text-align: center;
+  padding: 5rem 1.5rem 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-aurora h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.hero-aurora .sub {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.hero-aurora .btn-aurora {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* Product cards — Grok/API/Docs style */
+.products-aurora {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto 4rem;
+  padding: 0 1.5rem;
+}
+
+.card-aurora {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card-aurora:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.card-aurora h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.card-aurora p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+/* CTA links — global (Лекция, Симуляция, etc.) + inside cards */
+.cta,
+.card-aurora .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--accent) !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.15s, gap 0.2s;
+}
+
+.cta:hover,
+.card-aurora .cta:hover {
+  color: var(--accent-hover) !important;
+  gap: 0.5rem;
+}
+
+/* Footer — x.ai */
+.footer-aurora {
+  border-top: 1px solid var(--border);
+  padding: 3rem 1.5rem 2rem;
+  margin-top: 4rem;
+}
+
+.footer-aurora .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto 2rem;
+}
+
+.footer-aurora h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.footer-aurora a {
+  display: block;
+  color: var(--text-muted) !important;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  transition: color 0.15s;
+}
+
+.footer-aurora a:hover {
+  color: var(--text) !important;
+}
+
+.footer-aurora .copy {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Forms — minimal */
+.form-aurora {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form-aurora label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+  color: var(--text);
+}
+
+.form-aurora input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  font-size: 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text) !important;
+  margin-bottom: 1rem;
+  transition: border-color 0.15s;
+}
+
+.form-aurora input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-aurora .btn-submit {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.form-aurora .btn-submit:hover {
+  background: var(--accent-hover);
+}
+
+/* Dashboard — личный кабинет */
+.dash-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .dash-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dash-sidebar {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: sticky;
+  top: 5rem;
+}
+
+.dash-sidebar h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.dash-sidebar .stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.dash-sidebar .stat:last-of-type {
+  border-bottom: none;
+}
+
+.dash-main {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+
+.table-aurora {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table-aurora th,
+.table-aurora td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-aurora th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.table-aurora tr:hover {
+  background: var(--bg-elevated);
+}
+
+.badge-aurora {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge-aurora.success {
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--success);
+}
+
+.badge-aurora.danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger);
+}
+
+.badge-aurora.warning {
+  background: rgba(234, 179, 8, 0.2);
+  color: var(--warning);
+}
+
+/* Alerts */
+.alert-aurora {
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+}
+
+.alert-aurora.success {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.alert-aurora.danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--danger);
+  color: #fef2f2;
+}
+
+[data-theme="light"] .alert-aurora.danger {
+  color: #991b1b;
+}
+
+.alert-aurora.warning {
+  background: rgba(234, 179, 8, 0.15);
+  border-color: var(--warning);
+  color: #b45309;
+}
+
+[data-theme="light"] .alert-aurora.warning {
+  color: #854d0e;
+}
+
+.alert-aurora.info {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+[data-theme="light"] .alert-aurora.info {
+  color: #1e40af;
+}
+
+/* Trainer cards */
+.trainer-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.trainer-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: border-color 0.2s;
+}
+
+.trainer-card:hover {
+  border-color: var(--accent);
+}
+
+.trainer-card .diff {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.trainer-card .diff.easy { color: var(--success); }
+.trainer-card .diff.medium { color: var(--warning); }
+.trainer-card .diff.hard { color: var(--danger); }
+
+/* Page titles */
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.page-sub {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.table-aurora td {
+  color: var(--text);
+}
+
+/* Container */
+.container-aurora {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Theme toggle */
+[data-theme="light"] .icon-sun { display: none; }
+[data-theme="light"] .icon-moon { display: inline; }
+[data-theme="dark"] .icon-sun { display: inline; }
+[data-theme="dark"] .icon-moon { display: none; }

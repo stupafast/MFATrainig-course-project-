@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora" style="padding-top: 2rem; padding-bottom: 3rem;">
+    <h1 class="page-title">{% if lang == 'ru' %}Настройка MFA{% else %}Setup MFA{% endif %}</h1>
+    <p class="page-sub">
+        {% if lang == 'ru' %}Отсканируйте QR-код в Google Authenticator или Authy, затем введите код.{% else %}Scan the QR code in Google Authenticator or Authy, then enter the code.{% endif %}
+    </p>
+    <div class="card-aurora" style="max-width: 420px; margin: 0 auto 1.5rem; text-align: center;">
+        <p style="margin-bottom: 1rem;">1. {% if lang == 'ru' %}Установите Google Authenticator или Authy.{% else %}Install Google Authenticator or Authy.{% endif %}</p>
+        <p style="margin-bottom: 1rem;">2. {% if lang == 'ru' %}Отсканируйте QR-код ниже.{% else %}Scan the QR code below.{% endif %}</p>
+        <div style="padding: 1rem; background: var(--bg-elevated); border-radius: 8px; display: inline-block; margin-bottom: 1rem;">
+            <img src="data:image/png;base64,{{ qr_b64 }}" alt="QR Code" style="display: block;">
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">{% if lang == 'ru' %}Секрет:{% else %}Secret:{% endif %} <code>{{ secret }}</code></p>
+        <form method="POST" class="form-aurora" style="margin-top: 1rem;">
+            <label>{% if lang == 'ru' %}Введите 6-значный код для проверки:{% else %}Enter 6-digit code to verify:{% endif %}</label>
+            <input type="text" name="code" placeholder="000000" maxlength="6" required style="text-align: center; letter-spacing: 0.3em;">
+            <button type="submit" class="btn-submit">{% if lang == 'ru' %}Включить MFA{% else %}Enable MFA{% endif %}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

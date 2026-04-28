@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora" style="padding-top: 2rem; padding-bottom: 3rem;">
+    <h1 class="page-title" style="font-family: var(--font-sans);">{{ get_text('quiz') }}</h1>
+    <p class="page-sub" style="font-family: var(--font-sans);">{% if lang == 'ru' %}Теоретическая и практическая части. Выберите атаку для фильтра.{% else %}Theory and practical parts. Filter by attack.{% endif %}</p>
+
+    <form method="GET" action="{{ url_for('quiz') }}" style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <label style="font-family: var(--font-sans); font-size: 0.9rem; color: var(--text-muted);">{% if lang == 'ru' %}По атаке:{% else %}By attack:{% endif %}</label>
+        <select name="attack" style="font-family: var(--font-sans); padding: 0.5rem 1rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem;">
+            <option value="0" {% if attack_id == 0 %}selected{% endif %}>{% if lang == 'ru' %}Все{% else %}All{% endif %}</option>
+            {% for s in scenarios %}
+            <option value="{{ s.id }}" {% if attack_id == s.id %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-aurora btn-primary-aurora" style="padding: 0.5rem 1rem;">{% if lang == 'ru' %}Применить{% else %}Apply{% endif %}</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('quiz') }}">
+        <input type="hidden" name="attack" value="{{ attack_id }}">
+
+        <div class="card-aurora" style="max-width: 800px; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; font-family: var(--font-sans); color: var(--text-muted);">
+                {% if lang == 'ru' %}Часть 1. Теоретическая{% else %}Part 1. Theory{% endif %}
+            </h2>
+            {% for q in theory %}
+            <div class="quiz-item" style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); font-family: var(--font-sans);">
+                <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">{{ loop.index }}. {{ q.q_ru if lang == 'ru' else q.q_en }}</h4>
+                {% set opts = q.options_ru if lang == 'ru' else q.options_en %}
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    {% for opt in opts %}
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border); font-family: var(--font-sans);">
+                        <input type="radio" name="q_{{ q.id }}" value="{{ loop.index0 }}" required>
+                        {{ opt }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <p style="color: var(--text-muted); font-family: var(--font-sans);">{% if lang == 'ru' %}Нет вопросов по выбранной атаке.{% else %}No questions for this attack.{% endif %}</p>
+            {% endfor %}
+        </div>
+
+        <div class="card-aurora" style="max-width: 800px; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; font-family: var(--font-sans); color: var(--text-muted);">
+                {% if lang == 'ru' %}Часть 2. Практическая (уязвимости в коде){% else %}Part 2. Practical (code vulnerabilities){% endif %}
+            </h2>
+            {% for q in practical %}
+            <div class="quiz-item" style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); font-family: var(--font-sans);">
+                <div class="code-block" style="margin: 0.75rem 0;">
+                    <pre><code class="language-{{ q.code_lang }}">{{ q.code }}</code></pre>
+                </div>
+                <h4 style="font-size: 1rem; margin-bottom: 0.75rem;">{{ loop.index }}. {{ q.q_ru if lang == 'ru' else q.q_en }}</h4>
+                {% set opts = q.options_ru if lang == 'ru' else q.options_en %}
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    {% for opt in opts %}
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border); font-family: var(--font-sans);">
+                        <input type="radio" name="q_{{ q.id }}" value="{{ loop.index0 }}">
+                        {{ opt }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <p style="color: var(--text-muted); font-family: var(--font-sans);">{% if lang == 'ru' %}Нет практических заданий по выбранной атаке.{% else %}No practical tasks for this attack.{% endif %}</p>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn-aurora btn-primary-aurora" style="padding: 0.75rem 1.5rem;">{% if lang == 'ru' %}Отправить ответы{% else %}Submit answers{% endif %}</button>
+    </form>
+</div>
+{% endblock %}

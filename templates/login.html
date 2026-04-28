@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora" style="padding-top: 3rem; padding-bottom: 3rem;">
+    <div style="max-width: 400px; margin: 0 auto;">
+        <h1 class="page-title">{{ get_text('login') }}</h1>
+        <p class="page-sub">{% if lang == 'ru' %}Введите учётные данные для входа в MFAurora.{% else %}Enter credentials to sign in to MFAurora.{% endif %}</p>
+        <form method="POST" class="form-aurora">
+            <label>{% if lang == 'ru' %}Имя пользователя{% else %}Username{% endif %}</label>
+            <input type="text" name="username" required autocomplete="username">
+            <label>{% if lang == 'ru' %}Пароль{% else %}Password{% endif %}</label>
+            <input type="password" name="password" required autocomplete="current-password">
+            <button type="submit" class="btn-submit">{{ get_text('login') }}</button>
+        </form>
+        <p style="text-align: center; margin-top: 1rem;">
+            <a class="cta" href="{{ url_for('register') }}">{% if lang == 'ru' %}Нет аккаунта? Регистрация{% else %}No account? Register{% endif %} →</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

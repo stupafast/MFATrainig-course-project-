@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora" style="padding-top: 2rem; padding-bottom: 3rem;">
+    <h1 class="page-title">{% if lang == 'ru' %}Админ-панель{% else %}Admin Dashboard{% endif %}</h1>
+    <p class="page-sub">{% if lang == 'ru' %}Пользователи, MFA, последние попытки тренажёра.{% else %}Users, MFA, recent training activity.{% endif %}</p>
+
+    <div class="products-aurora" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 2rem;">
+        <div class="card-aurora">
+            <h3 style="font-size: 0.9rem; color: var(--text-muted);">{% if lang == 'ru' %}Пользователей{% else %}Total users{% endif %}</h3>
+            <p style="font-size: 2rem; font-weight: 700; margin: 0;">{{ users_count }}</p>
+        </div>
+        <div class="card-aurora">
+            <h3 style="font-size: 0.9rem; color: var(--text-muted);">{% if lang == 'ru' %}С MFA{% else %}With MFA{% endif %}</h3>
+            <p style="font-size: 2rem; font-weight: 700; margin: 0;">{{ mfa_count }}</p>
+        </div>
+    </div>
+
+    <div class="dash-main">
+        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-muted);">{% if lang == 'ru' %}Последние попытки тренажёра{% else %}Recent training activity{% endif %}</h3>
+        <table class="table-aurora">
+            <thead>
+                <tr>
+                    <th>{% if lang == 'ru' %}Пользователь{% else %}User{% endif %}</th>
+                    <th>{% if lang == 'ru' %}Сценарий{% else %}Scenario{% endif %}</th>
+                    <th>{% if lang == 'ru' %}Успех{% else %}Success{% endif %}</th>
+                    <th>{% if lang == 'ru' %}Время{% else %}Time{% endif %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in results %}
+                <tr>
+                    <td>{{ res.user_id }}</td>
+                    <td>{{ res.scenario_name }}</td>
+                    <td>{% if res.success %}<span class="badge-aurora success">✓</span>{% else %}<span class="badge-aurora danger">✗</span>{% endif %}</td>
+                    <td>{{ res.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" style="color: var(--text-muted);">{% if lang == 'ru' %}Нет данных.{% else %}No data.{% endif %}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <p style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a class="cta" href="{{ url_for('admin_export_csv') }}">{% if lang == 'ru' %}Экспорт CSV{% else %}Export CSV{% endif %} →</a>
+        <a class="cta" href="{{ url_for('admin_db_view') }}">{% if lang == 'ru' %}Просмотр БД{% else %}View DB{% endif %} →</a>
+    </p>
+</div>
+{% endblock %}

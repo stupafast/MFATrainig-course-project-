@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora" style="padding-top: 2rem; padding-bottom: 3rem;">
+    <h1 class="page-title">{{ get_text('dashboard') }}</h1>
+    <p class="page-sub">
+        {% if lang == 'ru' %}Профиль, история тренировок и прогресс по сценариям MFA.{% else %}Profile, training history, and MFA scenario progress.{% endif %}
+    </p>
+
+    <div class="dash-grid">
+        <aside class="dash-sidebar">
+            <h3>{% if lang == 'ru' %}Профиль{% else %}Profile{% endif %}</h3>
+            <div class="stat"><span style="color: var(--text-muted);">{% if lang == 'ru' %}Пользователь{% else %}User{% endif %}</span><span>{{ current_user.username }}</span></div>
+            <div class="stat"><span style="color: var(--text-muted);">{% if lang == 'ru' %}Попыток{% else %}Attempts{% endif %}</span><span>{{ total }}</span></div>
+            <div class="stat"><span style="color: var(--text-muted);">{% if lang == 'ru' %}Успешно{% else %}Successful{% endif %}</span><span>{{ successful }}</span></div>
+            <div class="stat"><span style="color: var(--text-muted);">{% if lang == 'ru' %}Успешность{% else %}Success rate{% endif %}</span><span>{{ success_rate }}%</span></div>
+            <div class="stat"><span style="color: var(--text-muted);">MFA</span>
+                {% if current_user.is_mfa_enabled %}
+                    <span class="badge-aurora success">{% if lang == 'ru' %}Вкл.{% else %}On{% endif %}</span>
+                {% else %}
+                    <span class="badge-aurora danger">{% if lang == 'ru' %}Выкл.{% else %}Off{% endif %}</span>
+                {% endif %}
+            </div>
+            <hr style="border-color: var(--border); margin: 1rem 0;">
+            {% if not current_user.is_mfa_enabled %}
+                <a class="cta" href="{{ url_for('mfa_setup') }}" style="display: inline-block; margin-bottom: 0.5rem;">{% if lang == 'ru' %}Настроить MFA{% else %}Setup MFA{% endif %} →</a>
+            {% endif %}
+            <a class="cta" href="{{ url_for('trainer_list') }}" style="display: inline-block; margin-bottom: 0.5rem;">{% if lang == 'ru' %}Тренажёр{% else %}Training Lab{% endif %} →</a>
+            <a class="cta" href="{{ url_for('quiz') }}" style="display: inline-block;">{{ get_text('quiz') }} →</a>
+        </aside>
+        <div class="dash-main">
+            <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-muted);">{% if lang == 'ru' %}История тренировок{% else %}Training history{% endif %}</h3>
+            <table class="table-aurora">
+                <thead>
+                    <tr>
+                        <th>{% if lang == 'ru' %}Дата{% else %}Date{% endif %}</th>
+                        <th>{% if lang == 'ru' %}Сценарий{% else %}Scenario{% endif %}</th>
+                        <th>{% if lang == 'ru' %}Результат{% else %}Result{% endif %}</th>
+                        <th>{% if lang == 'ru' %}Время (с){% else %}Time (s){% endif %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in results %}
+                    <tr>
+                        <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ r.scenario_name }}</td>
+                        <td>
+                            {% if r.success %}
+                                <span class="badge-aurora success">{% if lang == 'ru' %}Успех{% else %}Pass{% endif %}</span>
+                            {% else %}
+                                <span class="badge-aurora danger">{% if lang == 'ru' %}Провал{% else %}Fail{% endif %}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ '%.1f'|format(r.time_taken) if r.time_taken is not none else '—' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" style="color: var(--text-muted);">{% if lang == 'ru' %}Попыток пока нет. Начните с тренажёра.{% else %}No attempts yet. Start with the Training Lab.{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

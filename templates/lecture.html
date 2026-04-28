@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora lecture-page" style="padding-top: 2rem; padding-bottom: 3rem;">
+    <div style="margin-bottom: 1.5rem;">
+        <a class="cta" href="{{ url_for('trainer_list') }}">← {% if lang == 'ru' %}Тренажёр{% else %}Training Lab{% endif %}</a>
+        <span style="color: var(--text-muted); margin: 0 0.5rem;">|</span>
+        <a class="cta" href="{{ url_for('trainer_sim', sim_id=scenario_id) }}">{% if lang == 'ru' %}Симуляция{% else %}Simulation{% endif %} →</a>
+    </div>
+    <h1 class="page-title">{{ title }}</h1>
+    <p class="page-sub">{% if lang == 'ru' %}Лекция: уязвимости в коде при внедрении MFA.{% else %}Lecture: code-level vulnerabilities when implementing MFA.{% endif %}</p>
+
+    <div class="card-aurora" style="max-width: 800px;">
+        {% for b in blocks %}
+            {% if b.type == 'p' %}
+                <p style="margin-bottom: 1rem; font-family: var(--font-sans);">{{ b.text }}</p>
+            {% elif b.type == 'h3' %}
+                <h3 style="font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; font-family: var(--font-sans);">{{ b.text }}</h3>
+            {% elif b.type == 'code' %}
+                <div class="code-block" style="margin: 1rem 0;">
+                    <pre><code class="language-{{ b.lang }}">{{ b.code }}</code></pre>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <p style="font-family: var(--font-sans);">
+        <a class="btn-aurora btn-primary-aurora" href="{{ url_for('trainer_sim', sim_id=scenario_id) }}">{% if lang == 'ru' %}Перейти к симуляции{% else %}Go to simulation{% endif %} →</a>
+    </p>
+</div>
+{% endblock %}

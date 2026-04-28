@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-aurora" style="padding-top: 2rem; padding-bottom: 3rem;">
+    <div style="margin-bottom: 1.5rem; font-family: var(--font-sans);">
+        <a class="cta" href="{{ url_for('trainer_list') }}">← {% if lang == 'ru' %}Тренажёр{% else %}Training Lab{% endif %}</a>
+        <span style="color: var(--text-muted); margin: 0 0.5rem;">|</span>
+        <a class="cta" href="{{ url_for('lecture', scenario_id=sim_id) }}">{% if lang == 'ru' %}Лекция{% else %}Lecture{% endif %}</a>
+    </div>
+    <div class="alert-aurora warning" style="margin-bottom: 1.5rem;">
+        <strong style="font-family: var(--font-sans);">{% if lang == 'ru' %}Сценарий: Brute Force{% else %}Scenario: Brute Force{% endif %}</strong><br>
+        {% if lang == 'ru' %}Уязвимость в коде: эндпоинт <code>/mfa/verify</code> не ограничивает попытки. Нет rate limiting — можно перебирать 6-значный TOTP (10^6 комбинаций).{% else %}Code vulnerability: <code>/mfa/verify</code> has no attempt limit. No rate limiting — attacker brute-forces 6-digit TOTP (10^6 combinations).{% endif %}
+    </div>
+    <div class="card-aurora" style="max-width: 680px; margin-bottom: 1.5rem;">
+        <h4 style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; font-family: var(--font-sans);">{% if lang == 'ru' %}Уязвимый код{% else %}Vulnerable code{% endif %}</h4>
+        <div class="code-block"><pre><code class="language-python">@app.route('/mfa/verify', methods=['POST'])
+def verify():
+    code = request.json.get('code')
+    if pyotp.TOTP(secret).verify(code):
+        return jsonify({'ok': True})
+    return jsonify({'ok': False}), 401  # no rate limit!</code></pre></div>
+    </div>
+    <div class="card-aurora" style="max-width: 560px; margin-bottom: 1.5rem;">
+        <h3 style="margin-bottom: 0.75rem; font-family: var(--font-sans);">{% if lang == 'ru' %}Задание: эксплуатировать слабый пароль{% else %}Task: exploit weak password{% endif %}</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; font-family: var(--font-sans);">{% if lang == 'ru' %}Логин <code>admin</code>. Пароль — один из топ-5 худших. Система не лимитирует попытки.{% else %}Login <code>admin</code>. Password is a top-5 worst. No attempt limit.{% endif %}</p>
+        <form method="POST" id="bf-form">
+            <input type="hidden" name="time_taken" id="time_taken" value="0">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <input type="text" name="password" style="flex: 1; min-width: 180px; padding: 0.65rem 1rem; font-size: 1rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font-sans);" placeholder="{% if lang == 'ru' %}Подберите пароль...{% else %}Guess password...{% endif %}" required>
+                <button type="submit" class="btn-aurora" style="border-color: var(--danger); color: var(--danger); padding: 0.65rem 1rem;">{% if lang == 'ru' %}Атака / Вход{% else %}Attack / Login{% endif %}</button>
+            </div>
+        </form>
+    </div>
+    <p style="font-family: var(--font-sans);"><a class="cta" href="{{ url_for('lecture', scenario_id=sim_id) }}">{% if lang == 'ru' %}Подробнее в лекции{% else %}More in lecture{% endif %} →</a></p>
+</div>
+<script>
+(function(){ var s=Date.now(), f=document.getElementById('bf-form'), i=document.getElementById('time_taken');
+f.addEventListener('submit',function(){ i.value=((Date.now()-s)/1000).toFixed(1); }); })();
+</script>
+{% endblock %}

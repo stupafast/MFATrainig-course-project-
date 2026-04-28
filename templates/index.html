@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero-aurora">
+    <h1>{{ get_text('welcome') }}</h1>
+    <p class="sub">
+        {% if lang == 'ru' %}
+            Изучайте TOTP, криптографию RFC 6238 и методы обхода MFA в безопасной среде. Для специалистов по информационной безопасности.
+        {% else %}
+            Learn TOTP, RFC 6238 cryptography, and MFA bypass methods in a safe environment. For cybersecurity professionals.
+        {% endif %}
+    </p>
+    <a class="btn-aurora btn-primary-aurora" href="{{ url_for('register') }}">{{ get_text('start') }}</a>
+</section>
+
+<section id="products" class="products-aurora">
+    <div class="card-aurora" style="grid-column: 1 / -1;">
+        <h3>{% if lang == 'ru' %}Обучение MFA для всех{% else %}MFA training for everyone{% endif %}</h3>
+        <p style="margin-bottom: 0;">{% if lang == 'ru' %}Выберите продукт и начните практику.{% else %}Pick a product and start practicing.{% endif %}</p>
+    </div>
+    <div class="card-aurora">
+        <h3>{% if lang == 'ru' %}Тренажёр атак{% else %}Training Lab{% endif %}</h3>
+        <p>{% if lang == 'ru' %}5+ сценариев: QR‑фишинг, брутфорс, timing‑атаки, session hijacking, rate limiting bypass. Практикуйтесь в контролируемой среде.{% else %}5+ scenarios: QR phishing, brute-force, timing attacks, session hijacking, rate limiting bypass. Practice in a controlled environment.{% endif %}</p>
+        <a class="cta" href="{{ url_for('trainer_list') if current_user.is_authenticated else url_for('register') }}">
+            {% if current_user.is_authenticated %}{% if lang == 'ru' %}Открыть тренажёр{% else %}Open lab{% endif %}{% else %}{% if lang == 'ru' %}Начать{% else %}Get started{% endif %}{% endif %} →
+        </a>
+    </div>
+    <div class="card-aurora">
+        <h3>{% if lang == 'ru' %}Настройка MFA{% else %}MFA Setup{% endif %}</h3>
+        <p>{% if lang == 'ru' %}TOTP по RFC 6238, QR‑коды для Google Authenticator и Authy, резервные коды.{% else %}TOTP per RFC 6238, QR codes for Google Authenticator & Authy, backup codes.{% endif %}</p>
+        <a class="cta" href="{{ url_for('mfa_setup') if current_user.is_authenticated else url_for('register') }}">
+            {% if current_user.is_authenticated %}{% if lang == 'ru' %}Настроить{% else %}Setup{% endif %}{% else %}{% if lang == 'ru' %}Начать{% else %}Get started{% endif %}{% endif %} →
+        </a>
+    </div>
+    <div class="card-aurora">
+        <h3>{% if lang == 'ru' %}Тесты{% else %}Tests{% endif %}</h3>
+        <p>{% if lang == 'ru' %}Проверьте знания TOTP, HMAC-SHA1, base32 и методов обхода MFA.{% else %}Test your knowledge of TOTP, HMAC-SHA1, base32, and MFA bypass methods.{% endif %}</p>
+        <a class="cta" href="{{ url_for('quiz') if current_user.is_authenticated else url_for('register') }}">
+            {% if current_user.is_authenticated %}{% if lang == 'ru' %}Пройти тесты{% else %}Take tests{% endif %}{% else %}{% if lang == 'ru' %}Начать{% else %}Get started{% endif %}{% endif %} →
+        </a>
+    </div>
+</section>
+
+<section id="about" class="container-aurora" style="padding-bottom: 3rem;">
+    <h2 class="page-title" style="text-align: center;">{% if lang == 'ru' %}Почему MFAurora{% else %}Why MFAurora{% endif %}</h2>
+    <p class="page-sub" style="text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">
+        {% if lang == 'ru' %}
+            Локальный веб‑тренажёр с демонстрацией методов обхода MFA. Соответствует OWASP, NIST SP 800-63B, PCI-DSS 4.0, 152‑ФЗ.
+        {% else %}
+            Local web trainer with MFA bypass demos. Aligned with OWASP, NIST SP 800-63B, PCI-DSS 4.0.
+        {% endif %}
+    </p>
+    <div class="products-aurora" style="margin-bottom: 0;">
+        <div class="card-aurora">
+            <h3>{% if lang == 'ru' %}RFC 6238 · TOTP{% else %}RFC 6238 · TOTP{% endif %}</h3>
+            <p>{% if lang == 'ru' %}HMAC-SHA1, base32, временные окна 30 с.{% else %}HMAC-SHA1, base32, 30s time windows.{% endif %}</p>
+        </div>
+        <div class="card-aurora">
+            <h3>{% if lang == 'ru' %}5+ сценариев атак{% else %}5+ attack scenarios{% endif %}</h3>
+            <p>{% if lang == 'ru' %}QR‑фишинг, брутфорс, timing, session hijacking, rate limit bypass.{% else %}QR phishing, brute-force, timing, session hijacking, rate limit bypass.{% endif %}</p>
+        </div>
+        <div class="card-aurora">
+            <h3>{% if lang == 'ru' %}Офлайн{% else %}Offline-ready{% endif %}</h3>
+            <p>{% if lang == 'ru' %}Работает локально, без облака. SQLite, Flask.{% else %}Runs locally, no cloud. SQLite, Flask.{% endif %}</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

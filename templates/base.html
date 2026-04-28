@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" data-theme="{{ theme }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ get_text('title') }}{% endblock %} — MFAurora</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    {% if theme == 'light' %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" crossorigin="anonymous">
+    {% else %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" crossorigin="anonymous">
+    {% endif %}
+</head>
+<body>
+    <nav class="nav-aurora">
+        <div class="container-aurora" style="display: flex; align-items: center; justify-content: space-between; height: 56px;">
+            <a class="brand" href="{{ url_for('trainer_list') if current_user.is_authenticated else url_for('index') }}">MFAurora</a>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                {% if current_user.is_authenticated %}
+                    <a class="nav-link-aurora" href="{{ url_for('dashboard') }}">{{ get_text('dashboard') }}</a>
+                    <a class="nav-link-aurora" href="{{ url_for('trainer_list') }}">{{ get_text('training') }}</a>
+                    <a class="nav-link-aurora" href="{{ url_for('quiz') }}">{{ get_text('quiz') }}</a>
+                    {% if current_user.is_admin %}
+                        <a class="nav-link-aurora nav-link-admin" href="{{ url_for('admin_dashboard') }}">{{ get_text('admin') }}</a>
+                    {% endif %}
+                {% else %}
+                    <a class="nav-link-aurora" href="{{ url_for('index') }}#products">Products</a>
+                    <a class="nav-link-aurora" href="{{ url_for('index') }}#about">About</a>
+                {% endif %}
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-left: 0.5rem;">
+                    <a href="{{ url_for('set_theme', theme_mode='light') }}" class="btn-aurora {% if theme=='light' %}active{% endif %}" title="Light">☀</a>
+                    <a href="{{ url_for('set_theme', theme_mode='dark') }}" class="btn-aurora {% if theme=='dark' %}active{% endif %}" title="Dark">☾</a>
+                    <a href="{{ url_for('set_lang', lang_code='en') }}" class="btn-aurora {% if lang=='en' %}active{% endif %}" style="padding: 0.35rem 0.5rem;">EN</a>
+                    <a href="{{ url_for('set_lang', lang_code='ru') }}" class="btn-aurora {% if lang=='ru' %}active{% endif %}" style="padding: 0.35rem 0.5rem;">RU</a>
+                </div>
+                {% if current_user.is_authenticated %}
+                    <a class="btn-aurora btn-primary-aurora" href="{{ url_for('logout') }}" style="margin-left: 0.5rem;">{{ get_text('logout') }}</a>
+                {% else %}
+                    <a class="btn-aurora" href="{{ url_for('login') }}" style="margin-left: 0.5rem;">{{ get_text('login') }}</a>
+                    <a class="btn-aurora btn-primary-aurora" href="{{ url_for('register') }}">{{ get_text('register') }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container-aurora" style="padding-top: 1rem;">
+                    {% for category, message in messages %}
+                        <div class="alert-aurora {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}
+    <footer class="footer-aurora">
+        <div class="grid">
+            <div>
+                <h4>Products</h4>
+                <a href="{{ url_for('trainer_list') if current_user.is_authenticated else url_for('index') }}#products">Training Lab</a>
+                <a href="{{ url_for('mfa_setup') if current_user.is_authenticated else url_for('login') }}">MFA Setup</a>
+                <a href="{{ url_for('quiz') if current_user.is_authenticated else url_for('login') }}">Tests</a>
+            </div>
+            <div>
+                <h4>Company</h4>
+                <a href="{{ url_for('index') }}#about">About</a>
+                <a href="#">Security</a>
+            </div>
+            <div>
+                <h4>Resources</h4>
+                <a href="#">RFC 6238</a>
+                <a href="#">OWASP</a>
+            </div>
+        </div>
+        <p class="copy">{{ get_text('footer') }} · MFAurora © 2025</p>
+    </footer>
+    {% endblock %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" crossorigin="anonymous"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() { hljs.highlightAll(); });</script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
